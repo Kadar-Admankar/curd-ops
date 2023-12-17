@@ -1,14 +1,17 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { Book } from './schemas/book.schema';
 import { Query } from 'express-serve-static-core';
+import { LoggerService } from './logger/logger';
 
 @Injectable()
 export class BookService {
+    // logger = new Logger()  // // logging by using inbuilt logger
     constructor(   // constructor created for book model
         @InjectModel(Book.name)
-        private bookModel: mongoose.Model<Book>
+        private bookModel: mongoose.Model<Book>,
+        private readonly logger: LoggerService
     ){}
 
     async findAll(query :Query): Promise<Book[]> {     //  find all func of returning Promise of array of books
@@ -30,19 +33,28 @@ export class BookService {
 
     async create(book:Book): Promise<Book>{    // create func
         const res = await this.bookModel.create(book)
+
         return res
     }
     
     async findById(id:string): Promise<Book>{
         const isValidId = mongoose.isValidObjectId(id)
         if(!isValidId){
-            throw new BadRequestException('Please enter correct Id')
+            this.logger.log('Invalid Id')
+            // this.logger.log('wrong id')  // logging by using inbuilt logger
+            // throw new BadRequestException('Please enter correct Id')
         }
 
         const book = await this.bookModel.findById(id) // written query in services
-        if(!book){
-            throw new NotFoundException('Book not found')
+        if(book){
+            this.logger.log('book found')
+            // this.logger.log('successfully found book')   //// logging by using inbuilt logger
         }
+        if(!book){
+            this.logger.log('Book not found')  // logging by using inbuilt logger
+
+            // throw new NotFoundException('Book not found')
+        }   
         return book
     }
 
@@ -53,7 +65,7 @@ export class BookService {
         })
     }
 
-    async deleteById(id:string): Promise<Book>{
-        return await this.bookModel.findByIdAndDelete(id)
-    }
+    // async deleteById(id:string): Promise<Book | null>{
+    //     return await this.bookModel.findByIdAndDelete(id).exec()
+    // }
 }

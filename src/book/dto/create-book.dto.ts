@@ -24,3 +24,4 @@ export class CreateBookDto{
     @IsEnum(Category, { message: 'Please enter correct category.' })
     readonly category:Category
 }
+
