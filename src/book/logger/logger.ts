@@ -21,13 +21,17 @@ export class LoggerService {
   }
 
   async log(message: string) {
+    console.log('inside log ...')
     const logEntry = new LogModel({
       message,
       level: 'info',
     });
+    console.log('before save ....', logEntry)
 
-    await logEntry.save();
-    this.logger.log({ level: 'info', message});
+    // await logEntry.save();
+    await logEntry.save()
+    console.log('after save')
+    // this.logger.log({ level: 'info', message});
   }
 
   async error(message: string, trace: string, context?: string) {

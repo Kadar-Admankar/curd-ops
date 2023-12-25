@@ -5,6 +5,7 @@ import { BookModule } from './book/book.module';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ImageModule } from './storage/image.module';
+import { CryptoModule } from './book/encryptDecrypt/encryptDecrypt.module';
 
 @Module({
   imports: [
@@ -14,7 +15,8 @@ import { ImageModule } from './storage/image.module';
     }),  // .env config file imported
     MongooseModule.forRoot(process.env.DB_URI),  // db uri imported
     BookModule,
-    ImageModule
+    ImageModule,
+    CryptoModule
   ],
   controllers: [AppController], // app controller
   providers: [AppService],   // app service provided

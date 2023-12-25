@@ -33,7 +33,7 @@ export class BookService {
 
     async create(book:Book): Promise<Book>{    // create func
         const res = await this.bookModel.create(book)
-
+        // this.logger.log('payload entered')
         return res
     }
     

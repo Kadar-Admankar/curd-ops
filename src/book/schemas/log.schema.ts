@@ -1,10 +1,10 @@
 import * as mongoose from 'mongoose';
 
-// export interface Log extends mongoose.Document {
-//   level: string;
-//   message: string;
-//   timestamp: Date;
-// }
+export interface Log extends mongoose.Document {
+  level: string;
+  message: string;
+  timestamp: Date;
+}
 
 // export const LogModel = mongoose.model<Log>('Log', new mongoose.Schema({
 //   level: String,
@@ -35,4 +35,11 @@ export class Log {
 }
 
 export const LogSchema = SchemaFactory.createForClass(Log) 
-export const LogModel = mongoose.model<Log>('Log', LogSchema)
+export const LogModel = mongoose.model<Log>('Log', new mongoose.Schema({
+    level: String,
+    message: String,
+    timestamp: {
+      type: Date,
+      default: Date.now,
+    },
+  }))
